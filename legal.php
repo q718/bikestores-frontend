@@ -7,26 +7,20 @@
     <meta name="description" content="MMS401D" />
     <meta name="author" content="LThibault" />
     <title>BikeStores - Buy a bicycle!</title>
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Bootstrap icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
-    <!-- Core theme CSS (includes Bootstrap) -->
     <link href="styles/theme.css" rel="stylesheet" />
-    <!-- Map assets -->
     <link rel="stylesheet" href="styles/main.css" />
     <script src="scripts/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <!-- JQuery for easier API connection -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body id=top>
-    <!-- Navigation -->
     <?php
     include_once("www/menu.inc.php");
     ?>
-    <!-- Header -->
+
     <header class="bg-dark py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="text-center text-white">
@@ -35,7 +29,7 @@
             </div>
         </div>
     </header>
-    <!-- Section -->
+
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <p>This website, operated in France and subject to European data protection regulations, uses a cookie for the following purposes:</p>
@@ -53,11 +47,11 @@
             <hr>
             <p>By continuing to use this site without changing your cookie settings, you consent to the use of this authentication cookie.</p>
     </section>
-    <!-- Footer -->
+
     <?php
     include_once("www/footer.inc.php");
     ?>
-    <!-- Bootstrap core JS -->
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

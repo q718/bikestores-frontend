@@ -41,7 +41,7 @@ $(document).ready(function () {
                 } else {
                     $("#listProducts").empty();
                     $.each(data, function (index, product) {
-                        $("#listProducts").append("<div class='col mb-5'><div class='card h-100'><img class='card-img-top' src='https://dummyimage.com/450x300/dee2e6/6c757d.jpg' alt='...' /><div class='card-body p-4'><div class='text-center'><h5 class='fw-bolder'>" + product.product_name + "</h5>$" + product.list_price + "</div></div><div class='card-footer p-4 pt-0 border-top-0 bg-transparent'><div class='text-center'><a class='btn btn-outline-dark mt-auto' href='#'>Add to cart</a></div></div></div></div>");
+                        $("#listProducts").append("<div class='col mb-5'><div class='card h-100'><img class='card-img-top' src='https://dummyimage.com/450x300/dee2e6/6c757d.jpg' alt='...' /><div class='card-body p-4'><div class='text-center'><h5 class='fw-bolder'>" + product.product_name + "</h5>$" + product.list_price + "</div></div></div></div>");
                     });
                 }
             }
@@ -53,7 +53,7 @@ $(document).ready(function () {
      */
     function loadBrands() { // Ajax request to get brands
         $.ajax({
-            url: "https://dev-lenoir226.users.info.unicaen.fr/bikestores/brands/",
+            url: "https://dev-lenoir226.users.info.unicaen.fr/bikestores/brands",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -121,31 +121,51 @@ $(document).ready(function () {
     loadYears();
 
     /**
-     * Function to load prices and populate the dropdown.
+     * Function to load prices and populate the dropdown with price ranges.
      */
-    function loadPrices() { // Ajax request to get products and extract unique prices
+    function loadPrices() { // Ajax request to get products and extract prices
         $.ajax({
             url: "https://dev-lenoir226.users.info.unicaen.fr/bikestores/products",
             type: "GET",
             dataType: "json",
             success: function (data) {
-                var uniquePrices = [];
+                var allPrices = data.map(function (product) {
+                    return parseFloat(product.list_price);
+                });
 
-                $.each(data, function (index, product) {
-                    if (! uniquePrices.includes(product.list_price)) {
-                        uniquePrices.push(product.list_price);
+                // Find the maximum price
+                var maxPrice = Math.max(... allPrices);
+
+                // Define price ranges
+                var priceRanges = [];
+                var rangeStart = 0;
+                var rangeEnd = 500;
+
+                // Divide prices into ranges of 500 starting from 0 up to maxPrice
+                while (rangeStart <= maxPrice) {
+                    var pricesInRange = allPrices.filter(function (price) {
+                        return price >= rangeStart && price < rangeEnd;
+                    });
+
+                    if (pricesInRange.length > 0) {
+                        priceRanges.push({
+                            start: rangeStart,
+                            end: rangeEnd - 1,
+                            prices: pricesInRange
+                        });
                     }
-                });
 
-                // Sort unique prices and populate the dropdown
-                uniquePrices.sort(function (a, b) {
-                    return a - b;
-                });
+                    rangeStart += 500;
+                    rangeEnd += 500;
+                }
 
+                // Populate the dropdown with price range options
                 $("#priceSelect").empty();
                 $("#priceSelect").append("<option value=''>All prices</option>");
-                $.each(uniquePrices, function (index, price) {
-                    $("#priceSelect").append("<option value='" + price + "'>" + price + "</option>");
+                $.each(priceRanges, function (index, range) {
+                    var optionText = range.start + "-" + range.end;
+                    var optionValue = range.prices.join(",");
+                    $("#priceSelect").append("<option value='" + optionValue + "'>" + optionText + "</option>");
                 });
             }
         });
@@ -201,13 +221,13 @@ $(document).ready(function () {
      */
     function loadAllProducts() { // Ajax request to get all products
         $.ajax({
-            url: "https://dev-lenoir226.users.info.unicaen.fr/bikestores/products/",
+            url: "https://dev-lenoir226.users.info.unicaen.fr/bikestores/products",
             type: "GET",
             dataType: "json",
             success: function (data) {
                 $("#listProducts").empty();
                 $.each(data, function (index, product) {
-                    $("#listProducts").append("<div class='col mb-5'><div class='card h-100'><img class='card-img-top' src='https://dummyimage.com/450x300/dee2e6/6c757d.jpg' alt='...' /><div class='card-body p-4'><div class='text-center'><h5 class='fw-bolder'>" + product.product_name + "</h5>$" + product.list_price + "</div></div><div class='card-footer p-4 pt-0 border-top-0 bg-transparent'><div class='text-center'><a class='btn btn-outline-dark mt-auto' href='#'>Add to cart</a></div></div></div></div>");
+                    $("#listProducts").append("<div class='col mb-5'><div class='card h-100'><img class='card-img-top' src='https://dummyimage.com/450x300/dee2e6/6c757d.jpg' alt='...' /><div class='card-body p-4'><div class='text-center'><h5 class='fw-bolder'>" + product.product_name + "</h5>$" + product.list_price + "</div></div></div></div>");
                 });
             }
         });
